@@ -79,6 +79,8 @@ const PostDetail = () => {
   if (isLoading || isLoadingComment) return <Spinner className="w-20 h-20" />;
   if (!postData?.id) return <div>no data</div>;
 
+  console.log(commentData);
+
   // render data
   return (
     <div className="py-8">
@@ -113,7 +115,7 @@ const PostDetail = () => {
         </Button>
       </div>
 
-      {commentData?.length === 0 ? (
+      {commentData?.length === 0 || !commentData ? (
         <div>no comments</div>
       ) : (
         [...additionComment, ...commentData]?.map((comment) => (
