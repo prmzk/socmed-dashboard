@@ -1,10 +1,15 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useSWR from "swr";
 import fetcher from "../config/fetcher";
 import { Photo } from "../types";
+import { Spinner, Image } from "@nextui-org/react";
 
 const PhotoDetail = () => {
-  const { photoId } = useParams<{ photoId: string }>();
+  const { userId, photoId, albumId } = useParams<{
+    albumId: string;
+    userId: string;
+    photoId: string;
+  }>();
 
   const { data, isLoading } = useSWR(
     `https://jsonplaceholder.typicode.com/photos/${photoId}`,
@@ -13,14 +18,20 @@ const PhotoDetail = () => {
 
   const photoData: Photo = data;
 
-  if (isLoading) return <div>loading...</div>;
+  if (isLoading) return <Spinner className="w-20 h-20" />;
   if (!photoData?.id) return <div>no data</div>;
 
   // render data
   return (
-    <div>
-      <h1>{photoData?.title}</h1>
-      <img src={photoData?.url} alt={photoData?.title} />
+    <div className="py-12">
+      <Link
+        to={`/${userId}/albums/${albumId}`}
+        className="text-white text-lg underline pr-1"
+      >
+        Back to Album
+      </Link>
+      <h1 className="text-2xl text-gray-200 mb-4">{photoData?.title}</h1>
+      <Image src={photoData?.url} alt={photoData?.title} />
     </div>
   );
 };
