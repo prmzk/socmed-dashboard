@@ -1,5 +1,7 @@
 # Social Media Dashboard React App
 
+[Deployed Version]([https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable](https://socmed-dashboard-inky.vercel.app/)).
+
 Follow these steps to install and run the existing Vite React app:
 
 1. This app use Yarn to manage the javascript packages [install yarn (windows)](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable).
