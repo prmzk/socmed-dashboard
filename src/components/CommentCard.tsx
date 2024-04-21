@@ -1,27 +1,24 @@
-import { Button, Input, Textarea } from "@nextui-org/react";
-import { Link } from "react-router-dom";
-import { Post } from "../types";
+import { Button, Textarea } from "@nextui-org/react";
 import { useState } from "react";
+import { Comment } from "../types";
 
 type Props = {
-  post: Post;
-  deletePost: (postIdToDelete: number) => Promise<void>;
+  comment: Comment;
+  deleteComment: (commentIdToDelete: number) => Promise<void>;
 };
 
-const PostCard = ({ post, deletePost }: Props) => {
-  const [title, setTitle] = useState(post.title);
-  const [body, setBody] = useState(post.body);
+const CommentCard = ({ comment, deleteComment }: Props) => {
+  const [body, setBody] = useState(comment.body);
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const editPost = async () => {
+  const editComment = async () => {
     setLoading(true);
     const response = await fetch(
-      `https://jsonplaceholder.typicode.com/posts/${post.id}`,
+      `https://jsonplaceholder.typicode.com/comments/${comment.id}`,
       {
         method: "PUT",
         body: JSON.stringify({
-          title,
           body,
         }),
         headers: {
@@ -36,7 +33,7 @@ const PostCard = ({ post, deletePost }: Props) => {
 
   const submitDelete = async () => {
     setLoading(true);
-    await deletePost(post.id);
+    await deleteComment(comment.id);
     setLoading(false);
   };
 
@@ -44,22 +41,19 @@ const PostCard = ({ post, deletePost }: Props) => {
     <div className="flex border-b border-gray-300 py-8">
       <div className="flex flex-col">
         {!isEdit ? (
-          <div className="flex flex-col gap-2 flex-wrap">
-            <p className="text-xl font-bold text-gray-200">{title}</p>
-            <p className="text-md text-gray-200 whitespace-pre-line">{body}</p>
+          <div className="py-4 ">
+            <div className="flex items-center gap-2 mb-3">
+              <p className="text-gray-200 font-bold">{comment?.name}</p>
+              <p className="text-gray-200 font-bold">-</p>
+              <p className="text-gray-200 font-bold">{comment?.email}</p>
+            </div>
+            <p className="text-gray-200 whitespace-pre-line">{body}</p>
           </div>
         ) : (
           <div className="flex gap-2 items-center flex-wrap">
-            <Input
-              type="text"
-              label="Title"
-              className="mt-2"
-              onChange={(e) => setTitle(e.target.value)}
-              value={title}
-            />
             <Textarea
               type="text"
-              label="Post"
+              label="Comment"
               className="mt-2"
               onChange={(e) => setBody(e.target.value)}
               value={body}
@@ -70,26 +64,18 @@ const PostCard = ({ post, deletePost }: Props) => {
           <div className="flex mt-2 gap-3">
             <Button
               color="default"
-              as={Link}
-              to={`${post.id}`}
-              disabled={loading}
-            >
-              Check Comment
-            </Button>
-            <Button
-              color="default"
               onClick={() => setIsEdit(true)}
               disabled={loading}
             >
-              Edit Post
+              Edit Comment
             </Button>
             <Button color="danger" onClick={submitDelete} disabled={loading}>
-              {loading ? "Loading..." : "Delete Post"}
+              {loading ? "Loading..." : "Delete Comment"}
             </Button>
           </div>
         ) : (
           <div className="flex mt-2 gap-3">
-            <Button color="default" onClick={editPost} disabled={loading}>
+            <Button color="default" onClick={editComment} disabled={loading}>
               {loading ? "Loading..." : "Submit"}
             </Button>
           </div>
@@ -99,4 +85,4 @@ const PostCard = ({ post, deletePost }: Props) => {
   );
 };
 
-export default PostCard;
+export default CommentCard;
